@@ -1,0 +1,44 @@
+projectId: test-app-werwerr
+appName: hipstershop
+version: 1.0.0
+hostName: example.test
+clusterURL: https://kubernetes.default.svc
+clusterIPs:
+- 800.800.900
+- 790.890,789
+monitoring: true
+microservices:
+  orderService:
+    serviceName: orderservice
+    configs:
+    - mysql
+    avgReplicas: 2
+    minReplicas: 1
+    maxReplicas: 5
+    maxCPU: 200m
+    maxMemory: 700Mi
+    dockerImage: shenalisj/sample-microservices:latest
+    containerPort: 8080
+    envs:
+      DB_HOST:
+        name: DB_HOST
+        value: mysql
+      DB_USERNAME:
+        name: DB_USERNAME
+        value: root
+      MYSQL_DATABASE:
+        name: MYSQL_DATABASE
+        value: OrdersDB
+      MYSQL_ROOT_PASSWORD:
+        name: MYSQL_ROOT_PASSWORD
+        value: root
+    serviceEvaluation:
+      kubeConfigType:
+      - statefulSetBased
+evaluationResult:
+  language: Java
+  database: MySQL
+  hasKubernetesService: true
+  hasKubernetesDeployment: true
+  microservices:
+  - OrderService

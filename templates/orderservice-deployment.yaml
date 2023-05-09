@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{.Values.microservices.orderService.serviceName}}'
+  labels:
+    app: '{{.Values.microservices.orderService.serviceName}}'
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: '{{.Values.microservices.orderService.serviceName}}'
+  template:
+    metadata:
+      labels:
+        app: '{{.Values.microservices.orderService.serviceName}}'
+    spec:
+      containers:
+      - name: '{{.Values.microservices.orderService.serviceName}}'
+        image: '{{.Values.microservices.orderService.dockerImage}}'
+        ports:
+        - containerPort: 8080
+        env:
+        - name: '{{.Values.microservices.orderService.envs.MYSQL_ROOT_PASSWORD.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.orderService.serviceName}}'
+              key: '{{.Values.microservices.orderService.envs.MYSQL_ROOT_PASSWORD.name}}'
+        - name: '{{.Values.microservices.orderService.envs.MYSQL_DATABASE.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.orderService.serviceName}}'
+              key: '{{.Values.microservices.orderService.envs.MYSQL_DATABASE.name}}'
+        - name: '{{.Values.microservices.orderService.envs.DB_HOST.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.orderService.serviceName}}'
+              key: '{{.Values.microservices.orderService.envs.DB_HOST.name}}'
+        - name: '{{.Values.microservices.orderService.envs.DB_USERNAME.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.orderService.serviceName}}'
+              key: '{{.Values.microservices.orderService.envs.DB_USERNAME.name}}'
+        resources:
+          requests:
+            cpu: 100m
+            memory: 500Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
